@@ -38,9 +38,9 @@ public class UsersController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody Users loginUser) {
+    public ResponseEntity<String> login(@RequestBody Users loginUser) {
         try {
-            Users existingUser = usersService.findByEmail(loginUser.getEmail());
+            Users existingUser = usersService.findByEmailOrPhone(loginUser.getEmail());
 
             if (existingUser == null || !existingUser.getPassword().equals(loginUser.getPassword())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -49,13 +49,15 @@ public class UsersController {
             String token = jwtGenerator.generateToken(loginUser);
 
             LoginResponse loginResponse = new LoginResponse(token, existingUser);
-            HashMap<String, String> map = new HashMap<>();
-            map.put("id", existingUser.getEmail());
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("id", existingUser.getId());
             map.put("name", existingUser.getName());
             map.put("userType", existingUser.getUserType());
             map.put("imageUrl", existingUser.getImageUrl());
             map.put("token", token);
-            return new ResponseEntity<>(map, HttpStatus.OK);
+            ObjectMapper response = new ObjectMapper();
+            String json = response.writeValueAsString(map);
+            return new ResponseEntity<>(json, HttpStatus.OK);
         } catch (Exception e) {
             // Log the exception or handle it appropriately
             e.printStackTrace();  // Example: Print the stack trace for debugging
@@ -78,7 +80,8 @@ public class UsersController {
                 List<Childs> childs = childsService.findByUser(id);
                 map.put("childs", childs);
             }
-            map.put("id", existingUser.getEmail());
+            map.put("id", existingUser.getId());
+            map.put("email", existingUser.getEmail());
             map.put("name", existingUser.getName());
             map.put("userType", existingUser.getUserType());
             map.put("imageUrl", existingUser.getImageUrl());
@@ -97,20 +100,11 @@ public class UsersController {
 
     @PostMapping("/registration")
     public ResponseEntity<Map<String, Object>> registration(@RequestBody Users regUser) {
-        try {
-            Users existingUser = usersService.findByEmail(regUser.getEmail());
-
-            if (existingUser != null) {
-                HashMap<String, String> map = new HashMap<>();
-                map.put("message", "Вы уже зарегистрированы");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-
-            Users user = usersService.create(regUser.getName(), regUser.getPassword(), regUser.getUserType(), regUser.getImageUrl(), regUser.getUsername(), regUser.getGenderType(), regUser.getEmail());
+        try {git Users user = usersService.create(regUser.getName(), regUser.getPassword(), regUser.getUserType(), regUser.getImageUrl(), regUser.getUsername(), regUser.getGenderType(), regUser.getEmail(), regUser.getPhone());
             String token = jwtGenerator.generateToken(user);
 
             Map<String, Object> response = new HashMap<>();
-            response.put("token", token);
+    
             response.put("user", user);
 
 

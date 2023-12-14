@@ -17,13 +17,17 @@ public class UsersService {
         return userRepository.findByEmail(email);
     }
 
+    public Users findByEmailOrPhone(String email) {
+        return userRepository.findByEmailOrPhone(email, email);
+    }
+
     public Users findById(int id) {
         return userRepository.findById(id);
     }
 
-    public Users create(String name, String password, String userType, String imageUrl, String username, String genderType, String email) {
+    public Users create(String name, String password, String userType, String imageUrl, String username, String genderType, String email, String phone) {
         Users user = new Users();
-        user.create(name, password, userType, imageUrl, username, genderType, email);
+        user.create(name, password, userType, imageUrl, username, genderType, email, phone);
         userRepository.save(user);
         return user;
     }

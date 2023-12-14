@@ -27,11 +27,11 @@ public class Users implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "phone")
+    @Column(name = "phone", nullable = true, unique = true)
     private String phone;
 
     @Email
-    @Column(name = "email")
+    @Column(name = "email", nullable = true, unique = true)
     private String email;
 
     @Column(name = "image_url")
@@ -49,7 +49,7 @@ public class Users implements Serializable {
     @EqualsAndHashCode.Exclude
     private Childs childs;
 
-    public void create (String name, String password, String userType, String imageUrl, String username, String genderType, String email) {
+    public void create (String name, String password, String userType, String imageUrl, String username, String genderType, String email, String phone) {
         this.name = name;
         this.password = password;
         this.userType = userType;
@@ -57,6 +57,7 @@ public class Users implements Serializable {
         this.username = username;
         this.genderType = genderType;
         this.email = email;
+        this.phone = phone;
     }
 
 }
