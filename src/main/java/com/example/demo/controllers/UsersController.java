@@ -100,7 +100,7 @@ public class UsersController {
 
     @PostMapping("/registration")
     public ResponseEntity<Map<String, Object>> registration(@RequestBody Users regUser) {
-        try {git Users user = usersService.create(regUser.getName(), regUser.getPassword(), regUser.getUserType(), regUser.getImageUrl(), regUser.getUsername(), regUser.getGenderType(), regUser.getEmail(), regUser.getPhone());
+        try {Users user = usersService.create(regUser.getName(), regUser.getPassword(), regUser.getUserType(), regUser.getImageUrl(), regUser.getUsername(), regUser.getGenderType(), regUser.getEmail(), regUser.getPhone());
             String token = jwtGenerator.generateToken(user);
 
             Map<String, Object> response = new HashMap<>();
