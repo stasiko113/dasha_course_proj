@@ -21,6 +21,12 @@ public class VisitToDoctor implements Serializable {
     @Column(name = "date")
     private Date date;
 
+    @Column(name = "reason")
+    private String reason;
+
+    @Column(name = "address")
+    private String address;
+
     @ManyToOne
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     @ToString.Exclude

@@ -49,11 +49,9 @@ public class UsersController {
             String token = jwtGenerator.generateToken(loginUser);
 
             LoginResponse loginResponse = new LoginResponse(token, existingUser);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("id", existingUser.getId());
-            map.put("name", existingUser.getName());
-            map.put("userType", existingUser.getUserType());
-            map.put("imageUrl", existingUser.getImageUrl());
+            Map<String, Object> map = new HashMap<>();
+
+            map.put("user", existingUser);
             map.put("token", token);
             ObjectMapper response = new ObjectMapper();
             String json = response.writeValueAsString(map);
@@ -106,7 +104,7 @@ public class UsersController {
             Map<String, Object> response = new HashMap<>();
     
             response.put("user", user);
-
+            response.put("token", token);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
